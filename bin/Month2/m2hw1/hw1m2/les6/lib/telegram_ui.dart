@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+void main() => runApp(const ThemePracticeApp());
+
 class ThemePracticeApp extends StatefulWidget {
   const ThemePracticeApp({super.key});
   @override
@@ -11,8 +13,9 @@ class _ThemePracticeAppState extends State<ThemePracticeApp> {
 
   void toggleTheme() {
     setState(() {
-      _themeMode =
-          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+      _themeMode = _themeMode == ThemeMode.light
+          ? ThemeMode.dark
+          : ThemeMode.light;
     });
   }
 
@@ -31,9 +34,7 @@ class _ThemePracticeAppState extends State<ThemePracticeApp> {
           backgroundColor: Color(0xFF2AABEE),
           foregroundColor: Colors.white,
         ),
-        drawerTheme: const DrawerThemeData(
-          backgroundColor: Colors.white,
-        ),
+        drawerTheme: const DrawerThemeData(backgroundColor: Colors.white),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
@@ -43,14 +44,9 @@ class _ThemePracticeAppState extends State<ThemePracticeApp> {
           backgroundColor: Color(0xFF212121),
           foregroundColor: Colors.white,
         ),
-        drawerTheme: const DrawerThemeData(
-          backgroundColor: Color(0xFF1C1C1C),
-        ),
+        drawerTheme: const DrawerThemeData(backgroundColor: Color(0xFF1C1C1C)),
       ),
-      home: HomePage(
-        onToggleTheme: toggleTheme,
-        themeMode: _themeMode,
-      ),
+      home: HomePage(onToggleTheme: toggleTheme, themeMode: _themeMode),
     );
   }
 }
@@ -73,14 +69,62 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Чаты', style: TextStyle(fontSize: 22))),
+    ListView(
+      children: const [
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('А', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Алексей', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('Привет! Как дела?'),
+          trailing: Text('12:30', style: TextStyle(color: Colors.grey)),
+        ),
+        Divider(height: 1, indent: 70),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('Ф', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text(
+            'Flutter Group',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text('Новое задание 🧑‍💻'),
+          trailing: Text('11:15', style: TextStyle(color: Colors.grey)),
+        ),
+        Divider(height: 1, indent: 70),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('М', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Мама', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('Позвони мне'),
+          trailing: Text('10:02', style: TextStyle(color: Colors.grey)),
+        ),
+        Divider(height: 1, indent: 70),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('Т', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text(
+            'Telegram',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text('Обновление приложения'),
+          trailing: Text('Вчера', style: TextStyle(color: Colors.grey)),
+        ),
+      ],
+    ),
     const CallPage(),
     const ContactPage(),
     const SettingsPage(),
   ];
 
   final List<String> _titles = [
-    'Чаты',
+    'Telegram', 
     'Звонки',
     'Контакты',
     'Настройки',
@@ -89,9 +133,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_titles[_selectedIndex]),
-      ),
+      appBar: AppBar(title: Text(_titles[_selectedIndex])),
       drawer: AppDrawer(
         onToggleTheme: widget.onToggleTheme,
         themeMode: widget.themeMode,
@@ -113,14 +155,8 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: const Color(0xFF2AABEE),
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Чаты',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Звонки',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Чаты'),
+          BottomNavigationBarItem(icon: Icon(Icons.call), label: 'Звонки'),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_2),
             label: 'Контакты',
@@ -131,6 +167,135 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CallPage extends StatelessWidget {
+  const CallPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: const [
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('М', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Мама', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('Сегодня'),
+          trailing: Icon(Icons.call_received, color: Colors.green),
+        ),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('А', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Алексей', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('Вчера'),
+          trailing: Icon(Icons.call_made, color: Colors.green),
+        ),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('М', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Мария', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('20 мая'),
+          trailing: Icon(Icons.call_received, color: Colors.green),
+        ),
+      ],
+    );
+  }
+}
+
+class ContactPage extends StatelessWidget {
+  const ContactPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: const [
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('А', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Алексей', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('в сети', style: TextStyle(color: Colors.grey)),
+        ),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('М', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Мария', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('в сети', style: TextStyle(color: Colors.grey)),
+        ),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('Д', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Данияр', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('в сети', style: TextStyle(color: Colors.grey)),
+        ),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('А', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text('Айдана', style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('в сети', style: TextStyle(color: Colors.grey)),
+        ),
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Color(0xFFE3F2FD),
+            child: Text('F', style: TextStyle(color: Color(0xFF2AABEE))),
+          ),
+          title: Text(
+            'Flutter Teacher',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text('в сети', style: TextStyle(color: Colors.grey)),
+        ),
+      ],
+    );
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      children: [
+        ListTile(
+          leading: const Icon(Icons.notifications),
+          title: const Text('Уведомления и звуки'),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.lock),
+          title: const Text('Конфиденциальность'),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.folder),
+          title: const Text('Папки с чатами'),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.phone_android),
+          title: const Text('Устройства'),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.language),
+          title: const Text('Язык'),
+          onTap: () {},
+        ),
+      ],
     );
   }
 }
@@ -171,7 +336,9 @@ class AppDrawer extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundColor: isDark ? Colors.grey.shade800 : Colors.white,
+                      backgroundColor: isDark
+                          ? Colors.grey.shade800
+                          : Colors.white,
                       child: Icon(
                         Icons.person,
                         size: 34,
@@ -265,69 +432,6 @@ class AppDrawer extends StatelessWidget {
       title: Text(title),
       onTap: onTap,
       horizontalTitleGap: 8,
-    );
-  }
-}
-
-class CallPage extends StatelessWidget {
-  const CallPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Список звонков',
-        style: TextStyle(fontSize: 20),
-      ),
-    );
-  }
-}
-
-class ContactPage extends StatelessWidget {
-  const ContactPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Список контактов',
-        style: TextStyle(fontSize: 20),
-      ),
-    );
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      children: [
-        ListTile(
-          leading: const Icon(Icons.notifications),
-          title: const Text('Уведомления и звуки'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.lock),
-          title: const Text('Конфиденциальность'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.folder),
-          title: const Text('Папки с чатами'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.phone_android),
-          title: const Text('Устройства'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.language),
-          title: const Text('Язык'),
-          onTap: () {},
-        ),
-      ],
     );
   }
 }
