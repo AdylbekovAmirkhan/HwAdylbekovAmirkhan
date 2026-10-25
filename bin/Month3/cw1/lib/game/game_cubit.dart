@@ -6,94 +6,66 @@ class GameCubit extends Cubit<GameState> {
   GameCubit()
       : super(
           GameState(
-            cards: [
-              const CardModel(id: 1, color: Colors.red),
-              const CardModel(id: 2, color: Colors.blue),
-              const CardModel(id: 3, color: Colors.red),
-              const CardModel(id: 4, color: Colors.blue),
-            ]..shuffle(),
+            cardColors: [Colors.red, Colors.blue, Colors.red, Colors.blue]..shuffle(),
+            openedCards: [false, false, false, false],
             selectedIndices: [],
             errors: 0,
-            maxErrors: 1,
-            status: GameStatus.playing,
+            message: "Ищи пары карточек!",
+            isGameOver: false,
           ),
         );
 
-  void selectCard(int index) async {
-    if (state.status != GameStatus.playing) return;
-    if (state.cards[index].isMatched || state.cards[index].isOpened) return;
-    if (state.selectedIndices.contains(index) || state.selectedIndices.length >= 2) return;
+  void clickCard(int index) async {
+    if (state.isGameOver) return;
+    if (state.openedCards[index]) return;
+    if (state.selectedIndices.length >= 2) return;
 
-    final updatedCards = List<CardModel>.from(state.cards);
-    updatedCards[index] = updatedCards[index].copyWith(isOpened: true);
+    List<bool> newOpened = List.from(state.openedCards);
+    newOpened[index] = true;
 
-    final updatedSelection = List<int>.from(state.selectedIndices)..add(index);
+    List<int> newSelection = List.from(state.selectedIndices)..add(index);
 
-    emit(state.copyWith(cards: updatedCards, selectedIndices: updatedSelection));
+    emit(state.copyWith(openedCards: newOpened, selectedIndices: newSelection));
 
-    if (updatedSelection.length == 2) {
-      await Future.delayed(const Duration(milliseconds: 800));
-      _checkMatch(updatedSelection);
+    if (newSelection.length == 2) {
+      await Future.delayed(const Duration(milliseconds: 700));
+      _checkCards(newSelection);
     }
   }
 
-  void _checkMatch(List<int> selection) {
+  void _checkCards(List<int> selection) {
     if (isClosed) return;
 
-    final firstIndex = selection[0];
-    final secondIndex = selection[1];
+    int idx1 = selection[0];
+    int idx2 = selection[1];
 
-    final firstCard = state.cards[firstIndex];
-    final secondCard = state.cards[secondIndex];
-
-    final updatedCards = List<CardModel>.from(state.cards);
-
-    if (firstCard.color == secondCard.color) {
-      updatedCards[firstIndex] = updatedCards[firstIndex].copyWith(isMatched: true, isOpened: true);
-      updatedCards[secondIndex] = updatedCards[secondIndex].copyWith(isMatched: true, isOpened: true);
-
-      final isAllMatched = updatedCards.every((card) => card.isMatched);
+    if (state.cardColors[idx1] == state.cardColors[idx2]) {
+      bool win = state.openedCards.every((element) => element == true);
       emit(state.copyWith(
-        cards: updatedCards,
         selectedIndices: [],
-        status: isAllMatched ? GameStatus.success : GameStatus.playing,
+        message: win ? "Успешно! Все пары найдены." : "Успешно!",
+        isGameOver: win,
       ));
     } else {
-      final currentErrors = state.errors + 1;
-      
-      if (currentErrors > state.maxErrors) {
+      int newErrors = state.errors + 1;
+      if (newErrors >= 2) {
         emit(state.copyWith(
-          errors: currentErrors,
+          errors: newErrors,
           selectedIndices: [],
-          status: GameStatus.gameOver,
+          message: "У вас не осталось попыток.",
+          isGameOver: true,
         ));
       } else {
-        updatedCards[firstIndex] = updatedCards[firstIndex].copyWith(isOpened: false);
-        updatedCards[secondIndex] = updatedCards[secondIndex].copyWith(isOpened: false);
-        
+        List<bool> newOpened = List.from(state.openedCards);
+        newOpened[idx1] = false;
+        newOpened[idx2] = false;
         emit(state.copyWith(
-          cards: updatedCards,
+          openedCards: newOpened,
           selectedIndices: [],
-          errors: currentErrors,
+          errors: newErrors,
+          message: "Не совпадает! Осталась 1 попытка.",
         ));
       }
     }
-  }
-
-  void restartGame() {
-    emit(
-      GameState(
-        cards: [
-          const CardModel(id: 1, color: Colors.red),
-          const CardModel(id: 2, color: Colors.blue),
-          const CardModel(id: 3, color: Colors.red),
-          const CardModel(id: 4, color: Colors.blue),
-        ]..shuffle(),
-        selectedIndices: [],
-        errors: 0,
-        maxErrors: 1,
-        status: GameStatus.playing,
-      ),
-    );
   }
 }

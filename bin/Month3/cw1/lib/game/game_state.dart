@@ -1,57 +1,37 @@
 import 'package:flutter/material.dart';
 
-enum GameStatus { playing, success, gameOver }
-
-class CardModel {
-  final int id;
-  final Color color;
-  final bool isOpened;
-  final bool isMatched;
-
-  const CardModel({
-    required this.id,
-    required this.color,
-    this.isOpened = false,
-    this.isMatched = false,
-  });
-
-  CardModel copyWith({bool? isOpened, bool? isMatched}) {
-    return CardModel(
-      id: id,
-      color: color,
-      isOpened: isOpened ?? this.isOpened,
-      isMatched: isMatched ?? this.isMatched,
-    );
-  }
-}
-
 class GameState {
-  final List<CardModel> cards;
+  final List<Color> cardColors;
+  final List<bool> openedCards;
   final List<int> selectedIndices;
   final int errors;
-  final int maxErrors;
-  final GameStatus status;
+  final String message;
+  final bool isGameOver;
 
   const GameState({
-    required this.cards,
+    required this.cardColors,
+    required this.openedCards,
     required this.selectedIndices,
     required this.errors,
-    required this.maxErrors,
-    required this.status,
+    required this.message,
+    required this.isGameOver,
   });
 
   GameState copyWith({
-    List<CardModel>? cards,
+    List<Color>? cardColors,
+    List<bool>? openedCards,
     List<int>? selectedIndices,
     int? errors,
-    GameStatus? status,
+    String? message,
+    bool? isGameOver,
   }) {
     return GameState(
-      cards: cards ?? this.cards,
+      cardColors: cardColors ?? this.cardColors,
+      openedCards: openedCards ?? this.openedCards,
       selectedIndices: selectedIndices ?? this.selectedIndices,
       errors: errors ?? this.errors,
-      maxErrors: maxErrors,
-      status: status ?? this.status,
+      message: message ?? this.message,
+      isGameOver: isGameOver ?? this.isGameOver,
     );
   }
 }
