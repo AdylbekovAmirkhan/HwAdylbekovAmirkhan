@@ -33,9 +33,13 @@ class _TodoDetailPageState extends State<TodoDetailPage> {
         if (state.status == TodoDetailStatus.success) {
           Navigator.of(context).pop();
         }
-        if (state.status == TodoDetailStatus.error) {
+        if (state.status == TodoDetailStatus.error && state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Произошла ошибка')),
+            SnackBar(
+              content: Text(state.errorMessage!),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         }
       },
