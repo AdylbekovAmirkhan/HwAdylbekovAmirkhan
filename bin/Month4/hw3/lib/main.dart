@@ -15,16 +15,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (context) => CatBloc(),
-        child: const CatPage(),
-      ),
+      home: CatPage(),
     );
   }
 }
 
 class CatPage extends StatelessWidget {
-  const CatPage({super.key});
+  CatPage({super.key});
+
+  final CatBloc _catBloc = CatBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +31,7 @@ class CatPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Cats API')),
       body: Center(
         child: BlocBuilder<CatBloc, CatState>(
+          bloc: _catBloc,
           builder: (context, state) {
             if (state is CatLoadingState) {
               return const CircularProgressIndicator();
@@ -56,7 +56,7 @@ class CatPage extends StatelessWidget {
             } else {
               return ElevatedButton(
                 onPressed: () {
-                  context.read<CatBloc>().add(GetCatListEvent());
+                  _catBloc.add(GetCatListEvent());
                 },
                 child: const Text('Загрузить кошек'),
               );
